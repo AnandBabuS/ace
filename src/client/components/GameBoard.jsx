@@ -51,12 +51,14 @@ const Card = ({ cardValue , onCardClick, currentPlayer, cardShape, hasCardShape 
     )
 }
 
-const Name = ({ player ,index}) => {
+const Name = ({ hasWon, player ,index}) => {
     const className = "player" + "-" + (index+1);
     const classNamePlayer=  "player" + "-" + (index+1) + '-'+ "card";
+    const wonMsg = `${player} has won`
     return (
-    <div >
-        <span className={classNamePlayer}>{player}</span><img className={className} src={card} alt="cards" height="200" width="200"></img>
+    <div>
+        <span className={classNamePlayer}>{player}</span>
+    { hasWon ? wonMsg : <img className={className} src={card} alt="cards" height="200" width="200"></img> }
     </div>
     )
 }
@@ -67,7 +69,14 @@ class GameBoard extends React.Component{
         super(props)
         const playerWithCardData = {}
         props.players.forEach((player) => { playerWithCardData[player] = '' })
+        const players = props.players;
+        const { userName } = window.userData;
+        const otherPlayers = players.filter((player)=>player!==userName);
         this.state = {
+            iWon: false,
+            iLost: false,
+            isWon: {},
+            otherPlayers,
             cards: props.cards,
             playerWithCardData,
             currentPlayer: '',
@@ -86,9 +95,13 @@ class GameBoard extends React.Component{
 
     componentWillReceiveProps(nextProps) {
         console.log("componentWillReceiveProps")
-        this.setState({ cards: nextProps.cards });
+        const players = nextProps.players;
+        const { userName } = window.userData;
+        const otherPlayers = players.filter((player)=>player!==userName);
+        this.setState({ cards: nextProps.cards, otherPlayers });
     }
     componentWillMount(){
+        const { userName } = window.userData;
         const socket = SocketUtils.getSocket();
         socket.on("cardReceive", ({ userName, card }) => {
             console.log("cardReceive successfully", userName, card); 
@@ -113,10 +126,18 @@ class GameBoard extends React.Component{
 
         socket.on("clearBoard", ( data ) => {
             const playerWithCardData = this.state.playerWithCardData
+            let iWon = false;
+            if( this.state.cards.length <= 0 ) {
+                iWon = true;
+            }
             for( const player in playerWithCardData) {
                 playerWithCardData[player] = ''
             }
+            if(iWon) {
+                socket.emit("playerWon", { room: SocketUtils.getRoom(), userName });
+            }
             this.setState({
+                iWon,
                 playerWithCardData,
                 cardShape: '',
             })
@@ -126,6 +147,20 @@ class GameBoard extends React.Component{
             let cards = this.state.cards
             cards = cards.concat(data.cutCards);
             this.setState({ cards })
+        });
+
+        socket.on("playerWon", ({ playerName }) => {
+            const isWon = this.state.isWon
+            isWon[playerName] = true;
+            let iLost = false;
+            const otherPlayersLength = this.state.otherPlayers.length;
+            let noOfPlayersWon = Object.keys(isWon).length
+            console.log(noOfPlayersWon, "noOfPlayersWon", otherPlayersLength, "otherPlayersLength")
+            if(otherPlayersLength === noOfPlayersWon) {
+                console.log("inside if lost")
+                iLost = true
+            }
+            this.setState({ isWon, iLost })
         });
     }
 
@@ -146,20 +181,20 @@ class GameBoard extends React.Component{
         // socket.on("cardReceive", ({ userName, card }) => {
         //     console.log("cardReceive successfully", userName, card);
         // });
-        const players = this.props.players;
-        const { userName } = window.userData;
-        const otherPlayers = players.filter((player)=>player!==userName);
+        const { otherPlayers, isWon, iWon, iLost } = this.state
+        const { players} = this.props
+        console.log(iLost, "---lost from render")
         const otherNames = otherPlayers.length > 0 ? otherPlayers
-            .map((player,index) => <Name player={player} index={index}/>) : null
+            .map((player,index) => <Name hasWon={isWon[player]} player={player} index={index}/>) : null
 
         const cards = (this.state.cards && this.state.cards.length) > 0
             ? this.state.cards.map((cardValue) => <Card hasCardShape={this.hasCardShape} cardShape={this.state.cardShape} currentPlayer={this.state.currentPlayer} cardValue={cardValue} onCardClick={this.onCardClick} />) : null
         return (
             <div>
                 <div >{otherNames}</div>
-                <CenterBoardPlayers playerWithCardData={this.state.playerWithCardData} players={players}/>
+                <CenterBoardPlayers isWon={isWon} playerWithCardData={this.state.playerWithCardData} players={players}/>
                 <div className="card-bottom">
-                    {cards}
+                    {iLost ? "You lost" : iWon ? "You won dude" : cards}
                 </div>
             </div>
         )

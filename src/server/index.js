@@ -85,7 +85,7 @@ const getRandomInt = function(max) {
 
 const getOnePlateCards = (cardFace) => {
   const cards = []
-  for( i = 65 ; i < 78 ; i++ ){
+  for( i = 76 ; i < 78 ; i++ ){ //for( i = 65 ; i < 78 ; i++ ){
     cards.push(cardFace + String.fromCharCode(i));
   }
   return cards;
@@ -179,15 +179,22 @@ const isEligibleForCollect = (room) => {
   return false
 }
 
+const removePlayersWon = (roomObj) => {
+  const { playersWons, players } = roomObj;
+  
+}
+
 const findNextUserToPlay = (room) => {
-  const { currentPlayer } = room
+  console.log("findNextUserToPlay")
+  const { currentPlayer, playersWons } = room
   const players = Object.keys(room.players)
-  let index = players.indexOf(currentPlayer);
+  const eligiblePlayers = players.filter((player) => (playersWons.indexOf(player) === -1))
+  let index = eligiblePlayers.indexOf(currentPlayer);
   let nextIndex = index + 1;
-  if(players[nextIndex]){
-    return players[nextIndex];
+  if(eligiblePlayers[nextIndex]){
+    return eligiblePlayers[nextIndex];
   }
-  return players[0];
+  return eligiblePlayers[0];
 }
 
 const findFirstPlayerForNextRound = (room) => {
@@ -240,6 +247,7 @@ io.on("connection", socket => {
   socket.on("cardDrop", function({ room, userName, card}){
     console.log("cardDrop", room, userName, card)
     socket.to(room).emit("cardReceive", { userName, card });
+    
     const roomObj = getRoomFromRoomId(room);
     roomObj.currentRoundPlayerAndCard.push({ player: userName, card })
     roomObj.currentRoundCardsCount++;
@@ -257,6 +265,14 @@ io.on("connection", socket => {
     }
   })
 
+  socket.on("playerWon", function({ room, userName}){
+    socket.to(room).emit("playerWon", { playerName: userName });
+    const roomObj = getRoomFromRoomId(room);
+    roomObj.playersWons.push(userName)
+    removePlayersWon(roomObj);
+    roomObj.acceptedplayers--;
+  })
+
   socket.on("invitePpl", function(data) {
     console.log("server", JSON.stringify(data));
     const roomId = "room-" + roomNo;
@@ -270,7 +286,8 @@ io.on("connection", socket => {
     }
     rooms[data.invitee].currentRoundCardsCount = 0;
     rooms[data.invitee].currentRoundPlayerAndCard = [];
-    console.log(" inviting these ppl " + data.invitedPpl.toString())
+    rooms[data.invitee].playersWons = []
+    console.log(" i;nviting these ppl " + data.invitedPpl.toString())
     data.invitedPpl.forEach(person => {
       const socketId = sockets[person];
       io.to(`${socketId}`).emit("invitePpl", { invitee: data.invitee, room: roomId });
