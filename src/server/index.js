@@ -85,7 +85,7 @@ const getRandomInt = function(max) {
 
 const getOnePlateCards = (cardFace) => {
   const cards = []
-  for( i = 76 ; i < 78 ; i++ ){ //for( i = 65 ; i < 78 ; i++ ){
+  for( i = 65 ; i < 78 ; i++ ){ //for( i = 65 ; i < 78 ; i++ ){
     cards.push(cardFace + String.fromCharCode(i));
   }
   return cards;
@@ -236,6 +236,7 @@ io.on("connection", socket => {
     console.log(data.name);
     sockets[data.name] = socket.id;
     console.log(socket.id);
+    console.log(Object.keys(sockets))
   });
   //  console.log("made connection", socket);
   socket.on("chatInRoom", function(data) {

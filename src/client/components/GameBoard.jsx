@@ -34,11 +34,6 @@ const Card = ({ cardValue , onCardClick, currentPlayer, cardShape, hasCardShape 
     const className = "card " + number + "_" + shape;
     const onClick = (event) => {
         const { userName } = window.userData;
-        console.log(currentPlayer !== userName || (cardShape && hasCardShape(shape) && cardShape !== shape))
-        console.log(currentPlayer !== userName, currentPlayer, userName)
-        console.log(cardShape + "--cardShape")
-        console.log(hasCardShape(shape), shape)
-        console.log("cardShape !== shape---", cardShape !== shape)
         if(currentPlayer !== userName || (cardShape && hasCardShape(cardShape) && cardShape !== shape)){
             return;
         }
@@ -73,6 +68,7 @@ class GameBoard extends React.Component{
         const { userName } = window.userData;
         const otherPlayers = players.filter((player)=>player!==userName);
         this.state = {
+            iWonStatusSent: false,
             iWon: false,
             iLost: false,
             isWon: {},
@@ -127,16 +123,19 @@ class GameBoard extends React.Component{
         socket.on("clearBoard", ( data ) => {
             const playerWithCardData = this.state.playerWithCardData
             let iWon = false;
+            let iWonStatusSent = this.state.iWonStatusSent
             if( this.state.cards.length <= 0 ) {
                 iWon = true;
             }
             for( const player in playerWithCardData) {
                 playerWithCardData[player] = ''
             }
-            if(iWon) {
+            if(iWon && !iWonStatusSent) {
                 socket.emit("playerWon", { room: SocketUtils.getRoom(), userName });
+                iWonStatusSent = true;
             }
             this.setState({
+                iWonStatusSent,
                 iWon,
                 playerWithCardData,
                 cardShape: '',
