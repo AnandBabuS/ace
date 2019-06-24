@@ -1,5 +1,6 @@
 
 html {
+    color:#ffffff;
     background-color: #076324;
     background-image: url("http://www.transparenttextures.com/patterns/black-felt.png");
   }
@@ -10,6 +11,10 @@ html {
 
   .none-display {
     display: none;
+  }
+
+  .label {
+    color: black;
   }
   
   .card {
@@ -352,32 +357,42 @@ html {
     position: absolute;
     bottom: 0;
   }    
+  .lost-div {
+    margin-left: 40%;
+    width:100%;
+  }
+
+  .won-div{
+    margin-left: 40%;
+    width:100%;
+  }
+
   .player-1{
     position:absolute;
     left:10%;
     top:40%;
     transform:rotate(90deg);
-    height:100px;
-    width:100px
+    height:97px;
+    width:71px;
   }
   .player-2{
     position:absolute;
     left: 10%;
     top:10%;
-    height:100px;
-    width:100px;
+    height:97px;
+    width:71px;
     transform:rotate(90deg);
   }
  .player-3{
     position:absolute;
     left:50%;
     top:10%;
-    height: 100px;
-    width: 100px;
+    height:97px;
+    width:71px;
   }
   .player-4{
-    height: 100px;
-    width: 100px;
+    height:97px;
+    width:71px;
     position:absolute;
     right:10%;
     top:40%;
@@ -385,19 +400,12 @@ html {
   }
   .player-5{
     position:absolute;
-    left:10%;
-    top:10%;
-    height: 100px;
-    width: 100px;
+    right:10%;
+    top:40%;
+    height:97px;
+    width:71px;
   }
-  /* .player-6{
-    position:absolute;
-    right:0;
-    top:300px;
-    height: 100px;
-    width: 100px;
-    background-color: magenta;
-  } */
+
   .player-1-card{
     position: absolute;
     top: 45%;

@@ -111,7 +111,7 @@ const emitCards = (room) => {
     if(containAce(room.players[player].cards)) {
       room.currentPlayer = player;
     }
-    io.to(`${socketId}`).emit("initialCards", { room: room.roomId, players: Object.keys(room.players), cards: room.players[player].cards });
+    io.to(`${socketId}`).emit("initialCards", { room: room.roomId, players: Object.keys(room.players), cards: room.players[player].cards.sort() });
   }
 }
 
@@ -255,10 +255,14 @@ io.on("connection", socket => {
     if(isEligibleForCollect(roomObj)) {
       findFirstPlayerForNextRound(roomObj);
       console.log(roomObj.currentPlayer)
-      io.in(roomObj.roomId).emit('clearBoard', "");
-      emitCurrentPlayerData(roomObj);
-      roomObj.currentRoundCardsCount = 0;
-      roomObj.currentRoundPlayerAndCard = []
+      io.in(room.roomId).emit('currentPlayer', { currentPlayer: "none" });
+      setTimeout(function () {
+        io.in(roomObj.roomId).emit('clearBoard', "");
+        emitCurrentPlayerData(roomObj);
+        roomObj.currentRoundCardsCount = 0;
+        roomObj.currentRoundPlayerAndCard = [] 
+      }, 2000); 
+      
     } else{
       const nextUserToPlay = findNextUserToPlay(roomObj);
       roomObj.currentPlayer = nextUserToPlay;

@@ -2,8 +2,6 @@ import React from 'React'
 import SocketUtils from "../socketUtils"
 import card from "../assets/pcard3.png"
 import CenterBoardPlayers from "./CenterBoardPlayers.jsx"
-//import { threadId } from 'worker_threads';
-//import Draggable, {DraggableCore} from 'react-draggable';
 
 const shapeMap = {
     "H": "hearts",
@@ -52,8 +50,8 @@ const Name = ({ hasWon, player ,index}) => {
     const wonMsg = `${player} has won`
     return (
     <div>
-        <span className={classNamePlayer}>{player}</span>
-    { hasWon ? wonMsg : <img className={className} src={card} alt="cards" height="200" width="200"></img> }
+        <span className={classNamePlayer}>{hasWon ? wonMsg : player}</span>
+    { hasWon ? "" : <img className={className} src={card} ></img> }
     </div>
     )
 }
@@ -158,7 +156,7 @@ class GameBoard extends React.Component{
             const otherPlayersLength = this.state.otherPlayers.length;
             let noOfPlayersWon = Object.keys(isWon).length
             console.log(noOfPlayersWon, "noOfPlayersWon", otherPlayersLength, "otherPlayersLength")
-            if(otherPlayersLength === noOfPlayersWon) {
+            if( !this.state.iWon && (otherPlayersLength === noOfPlayersWon)) {
                 console.log("inside if lost")
                 iLost = true
             }
@@ -191,7 +189,7 @@ class GameBoard extends React.Component{
                 <div >{otherNames}</div>
                 <CenterBoardPlayers currentPlayer={currentPlayer} isWon={isWon} playerWithCardData={this.state.playerWithCardData} players={players}/>
                 <div className="card-bottom">
-                    {iLost ? <div className="lost-div">"You lost"</div> : iWon ? <div className="won-div">"You won dude"</div> : cards}
+                    {iLost ? <div className="lost-div">You lost</div> : iWon ? <div className="won-div">You won dude ;)</div> : cards}
                 </div>
             </div>
         )
