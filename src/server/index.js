@@ -321,6 +321,10 @@ io.on("connection", socket => {
     }
   });
 
+  socket.on("refreshToHome", ({ roomId }) => {
+    io.in(roomId).emit('refreshToHome', { homeURL: '/home' });
+  })
+
 });
 
 console.log("end of file");

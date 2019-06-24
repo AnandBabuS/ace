@@ -159,8 +159,13 @@ class GameBoard extends React.Component{
             if( !this.state.iWon && (otherPlayersLength === noOfPlayersWon)) {
                 console.log("inside if lost")
                 iLost = true
+                socket.emit("refreshToHome", { roomId: SocketUtils.getRoom()});
             }
             this.setState({ isWon, iLost })
+        });
+
+        socket.on("refreshToHome", ({ homeURL }) => {
+            window.location.href = homeURL
         });
     }
 
