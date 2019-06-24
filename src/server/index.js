@@ -286,6 +286,8 @@ io.on("connection", socket => {
       [data.invitee]: {}
     }
     rooms[data.invitee].currentRoundCardsCount = 0;
+    rooms[data.invitee].acceptedplayers = 0;
+    rooms[data.invitee].rejectedPlayers = 0;
     rooms[data.invitee].currentRoundPlayerAndCard = [];
     rooms[data.invitee].playersWons = []
     console.log(" i;nviting these ppl " + data.invitedPpl.toString())
@@ -297,14 +299,24 @@ io.on("connection", socket => {
 
   socket.on("accept", function(data) {
     rooms[data.invitee].acceptedplayers = rooms[data.invitee].acceptedplayers ? rooms[data.invitee].acceptedplayers + 1 : 1
-    console.log(data.invite + "accepting", data.invitee);
+    console.log(data.invite + " accepting ", data.invitee);
     socket.join(rooms[data.invitee].roomId);
     rooms[data.invitee].players[data.invite] = {}
-    if( rooms[data.invitee].acceptedplayers === rooms[data.invitee].noOfPplInvited ) {
-      console.log("all accepted")
+    if( (rooms[data.invitee].acceptedplayers + rooms[data.invitee].rejectedPlayers) === rooms[data.invitee].noOfPplInvited ) {
+      console.log("all done accepted")
       createGame(rooms[data.invitee]);
     }
   });
+
+  socket.on("reject", function(data) {
+    rooms[data.invitee].rejectedPlayers = rooms[data.invitee].rejectedPlayers ? rooms[data.invitee].rejectedPlayers + 1 : 1
+    console.log(data.invite + " rejects ", data.invitee);
+    if( (rooms[data.invitee].acceptedplayers + rooms[data.invitee].rejectedPlayers) === rooms[data.invitee].noOfPplInvited ) {
+      console.log("all done reject")
+      createGame(rooms[data.invitee]);
+    }
+  });
+
 });
 
 console.log("end of file");

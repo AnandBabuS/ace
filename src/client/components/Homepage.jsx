@@ -54,6 +54,8 @@ class Homepage extends Component {
                 socket.emit("accept", { invite: userName, invitee: data.invitee });
                 console.log("accept")
                 me.setState({showGameBoard : true})
+              } else {
+                socket.emit("reject", { invite: userName, invitee: data.invitee });
               }
           });
 

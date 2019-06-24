@@ -4,6 +4,10 @@ html {
     background-image: url("http://www.transparenttextures.com/patterns/black-felt.png");
   }
 
+.current-player-border {
+  border: 3px solid red !important;
+}
+
   .none-display {
     display: none;
   }

@@ -44,8 +44,16 @@ class SignUp extends React.Component {
                 username: this.state.initialUserName, // 12345
                 password: this.state.initialPassword // 1234567890
               })
-              .then(function(response) {
-                console.log(response.data);
+              .then((response) => {
+                axios.post("/signin", {
+                    username: this.state.initialUserName, // 12345
+                    password: this.state.initialPassword // 1234567890
+                  }).then(function(response) {
+                    window.location.href = response.request.responseURL;
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                  })
               })
               .catch(function(error) {
                 console.log(error);

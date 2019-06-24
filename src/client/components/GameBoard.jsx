@@ -124,6 +124,7 @@ class GameBoard extends React.Component{
             const playerWithCardData = this.state.playerWithCardData
             let iWon = false;
             let iWonStatusSent = this.state.iWonStatusSent
+            let isWon = this.state.isWon
             if( this.state.cards.length <= 0 ) {
                 iWon = true;
             }
@@ -133,8 +134,10 @@ class GameBoard extends React.Component{
             if(iWon && !iWonStatusSent) {
                 socket.emit("playerWon", { room: SocketUtils.getRoom(), userName });
                 iWonStatusSent = true;
+                isWon[userName] = true;
             }
             this.setState({
+                isWon,
                 iWonStatusSent,
                 iWon,
                 playerWithCardData,
@@ -176,13 +179,8 @@ class GameBoard extends React.Component{
 
 
     render(){
-        // const socket = SocketUtils.getSocket();
-        // socket.on("cardReceive", ({ userName, card }) => {
-        //     console.log("cardReceive successfully", userName, card);
-        // });
-        const { otherPlayers, isWon, iWon, iLost } = this.state
+        const { otherPlayers, isWon, iWon, iLost, currentPlayer } = this.state
         const { players} = this.props
-        console.log(iLost, "---lost from render")
         const otherNames = otherPlayers.length > 0 ? otherPlayers
             .map((player,index) => <Name hasWon={isWon[player]} player={player} index={index}/>) : null
 
@@ -191,9 +189,9 @@ class GameBoard extends React.Component{
         return (
             <div>
                 <div >{otherNames}</div>
-                <CenterBoardPlayers isWon={isWon} playerWithCardData={this.state.playerWithCardData} players={players}/>
+                <CenterBoardPlayers currentPlayer={currentPlayer} isWon={isWon} playerWithCardData={this.state.playerWithCardData} players={players}/>
                 <div className="card-bottom">
-                    {iLost ? "You lost" : iWon ? "You won dude" : cards}
+                    {iLost ? <div className="lost-div">"You lost"</div> : iWon ? <div className="won-div">"You won dude"</div> : cards}
                 </div>
             </div>
         )
