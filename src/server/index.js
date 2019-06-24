@@ -6,6 +6,8 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 //const FileStore = require("session-file-store")(session);
 const path = require("path")
+require("./views/homepage.ejs")
+require("./views/login.ejs")
 
 var app = express();
 app.use(
