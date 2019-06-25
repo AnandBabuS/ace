@@ -8,7 +8,7 @@ const getSocket = () => {
 }
 
 const connectSocket = () => {
-    socket = io('https://ace-hears.firebaseapp.com')
+    socket = io('/')
 }
 
 const setRoom = (roomId) => {
