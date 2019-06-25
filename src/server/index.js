@@ -70,7 +70,7 @@ var mongoLink =
 mongoose.connect(mongoLink);
 mongoose.Promise = global.Promise;
 
-var server = app.listen(process.env.PORT, () => {
+var server = app.listen(process.env.PORT || 8080, () => {
   console.log("listens to 8080");
 });
 

@@ -4,7 +4,7 @@ module.exports = {
     mode : 'development',
     entry: {
       login : './src/client/index.js',
-      homePage : './src/client/homepage.js'
+      homepage : './src/client/homepage.js'
     },
     output: {
         path: path.resolve(__dirname, 'public'),
