@@ -1,4 +1,4 @@
-import React from 'React'
+import React from 'react'
 import SocketUtils from "../socketUtils"
 import card from "../assets/pcard3.png"
 import CenterBoardPlayers from "./CenterBoardPlayers.jsx"
