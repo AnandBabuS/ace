@@ -111,7 +111,10 @@ class Homepage extends Component {
         const { open, users } = this.state;
         return(
             <div>
-                <div className="header-comp">Logged as {userName}</div>  
+                <div className="header-comp">
+                    Logged as {userName}
+                    <a href="/logout">logout</a>
+                </div>  
                 {!this.state.showGameBoard?
                 (<div>
                     <Modal

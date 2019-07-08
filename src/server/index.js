@@ -10,6 +10,7 @@ const path = require("path")
 var app = express();
 app.use(
   session({
+    key: 'user_sid',
     name: "_es_demo", // The name of the cookie
     secret: "1234", // The secret is required, and is used for signing cookies
     resave: false, // Force save of session for each request.
@@ -24,7 +25,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '/views'));
 app.get('/', function(req, res) {
+  
   if(req.sessionID && req.session.user) {
+    console.log(req.session.user, "--res.session.user /")
     res.render('homepage', { userName: req.session.user });
   } else {
     res.render('login', { title: 'Express' });
@@ -32,13 +35,19 @@ app.get('/', function(req, res) {
 });
 
 app.get("/home", function(req, res) {
-  console.log(req.sessionID)
   console.log(req.session)
   if(req.sessionID && req.session.user) {
+    console.log(req.session.user, "--res.session.user /home")
     res.render('homepage', { userName: req.session.user });
   } else {
     res.render('login', { title: 'Express' });
  }
+})
+
+app.get("/logout", function(req, res) {
+  console.log("logout - route")
+  req.session.user = null;
+  res.redirect('/');
 })
 
 app.use(express.static("public"));
@@ -53,7 +62,6 @@ app.post("/signup", signUpRoute);
 app.get("/getUsers", (req, res) => {
   const allUsers = Object.keys(sockets);
   const allUsersButMe = allUsers.filter((user) => user !== req.session.user)
-  console.log(allUsersButMe);
   res.send(allUsersButMe);
 });
 
@@ -233,10 +241,10 @@ const findFirstPlayerForNextRound = (room) => {
 
 io.on("connection", socket => {
   socket.on("hi", function(data) {
-    console.log(data.name);
+    console.log(data.name, " name of socket on connection");
     sockets[data.name] = socket.id;
-    console.log(socket.id);
-    console.log(Object.keys(sockets))
+    console.log(socket.id, " socket id");
+    console.log(Object.keys(sockets), " -- all ppl logged in now")
   });
   //  console.log("made connection", socket);
   socket.on("chatInRoom", function(data) {
