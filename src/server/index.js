@@ -45,7 +45,6 @@ app.get("/home", function(req, res) {
 })
 
 app.get("/logout", function(req, res) {
-  console.log("logout - route")
   req.session.user = null;
   res.redirect('/');
 })
@@ -155,7 +154,6 @@ const createGame = (room) => {
 
 const checkForCardCut = (room) => {
   const { currentRoundPlayerAndCard } = room
-  console.log(currentRoundPlayerAndCard)
   let i = 0;
   const initialPlayerAndcard = currentRoundPlayerAndCard[i];
   const initialCard = initialPlayerAndcard && initialPlayerAndcard.card;
@@ -172,18 +170,14 @@ const checkForCardCut = (room) => {
 }
 
 const isEligibleForCollect = (room) => {
-  console.log("isEligibleForCollect")
   const { acceptedplayers, currentRoundCardsCount } = room
   const isCardCut = checkForCardCut(room);
   console.log(currentRoundCardsCount)
   if(currentRoundCardsCount === ( acceptedplayers + 1)) {
-    console.log("isEligibleForCollect", true, "-- number")
     return true;
   } else if(isCardCut) {
-    console.log("isEligibleForCollect", true, "--card cut")
     return true;
   }
-  console.log("isEligibleForCollect", false)
   return false
 }
 

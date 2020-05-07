@@ -88,7 +88,6 @@ class GameBoard extends React.Component{
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log("componentWillReceiveProps")
         const players = nextProps.players;
         const { userName } = window.userData;
         const otherPlayers = players.filter((player)=>player!==userName);
@@ -98,7 +97,6 @@ class GameBoard extends React.Component{
         const { userName } = window.userData;
         const socket = SocketUtils.getSocket();
         socket.on("cardReceive", ({ userName, card }) => {
-            console.log("cardReceive successfully", userName, card); 
             const cardIDArr = card.split("");
             const shape = shapeMap[cardIDArr[0]];
             const number = numberMap[cardIDArr[1]]
@@ -171,11 +169,9 @@ class GameBoard extends React.Component{
 
     hasCardShape(cardShape) {
         const cards = this.state.cards
-        console.log(cards)
         return cards.some((card) => {
             const cardIDArr = card.split("");
             const shape = shapeMap[cardIDArr[0]];
-            console.log(card, cardShape, shape)
             return (cardShape === shape)
         })
     }
@@ -184,14 +180,10 @@ class GameBoard extends React.Component{
     render(){
         const { otherPlayers, isWon, iWon, iLost, currentPlayer } = this.state
         const { players} = this.props
-        const otherNames = otherPlayers.length > 0 ? otherPlayers
-            .map((player,index) => <Name hasWon={isWon[player]} player={player} index={index}/>) : null
-
         const cards = (this.state.cards && this.state.cards.length) > 0
             ? this.state.cards.map((cardValue) => <Card hasCardShape={this.hasCardShape} cardShape={this.state.cardShape} currentPlayer={this.state.currentPlayer} cardValue={cardValue} onCardClick={this.onCardClick} />) : null
         return (
             <div>
-                <div >{otherNames}</div>
                 <CenterBoardPlayers currentPlayer={currentPlayer} isWon={isWon} playerWithCardData={this.state.playerWithCardData} players={players}/>
                 <div className="card-bottom">
                     {iLost ? <div className="lost-div">You lost</div> : iWon ? <div className="won-div">You won dude ;)</div> : cards}

@@ -4,7 +4,7 @@ import React from  'react';
 const User = (props) => {
     const user = props.user
     return(
-        <label className="label"><input onClick={()=>{props.checkUser(user)}} type="checkbox" value={user} /> <span>{user}</span> </label>
+        <div className="label"><input onClick={()=>{props.checkUser(user)}} type="checkbox" value={user} /> <span>{user}</span> </div>
     )
 }
 

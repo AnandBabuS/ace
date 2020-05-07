@@ -1,12 +1,43 @@
 
 html {
+    height: 100%;
+    margin: 0;
     color:#ffffff;
     background-color: #076324;
     background-image: url("http://www.transparenttextures.com/patterns/black-felt.png");
   }
 
+body {
+  height: 100%;
+  margin: 0;
+}
+
 .current-player-border {
   border: 3px solid red !important;
+}
+
+.header-comp{
+  position: fixed;
+  left: 90%;
+  top: 3%;
+}
+
+.button-margin {
+  margin: 1%;
+}
+
+.link-button{
+    background-color: #28a745;
+    color: white;
+    padding: 2%;
+    text-decoration: none;
+    top: 8%;
+    position: fixed;
+    left: 90%;
+}
+
+.create-room-button {
+  margin-top: 30%;
 }
 
   .none-display {
@@ -21,9 +52,9 @@ html {
     display: inline-block;
   }
   .centerBoard{
-    position: fixed;
-    top: 35%;
-    left: 40%;
+        position: fixed;
+    top: 15%;
+    left: 15%;
     text-align: center;
   }
   #centerBoardPlayers1{
@@ -41,6 +72,8 @@ html {
     display:inline-block;
     margin:3px;
   }
+
+
   
   .ace_clubs {
    width: 71px;
@@ -430,4 +463,29 @@ html {
     position: absolute;
     top: 15%;
     right: 6%;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .centerBoard{
+      position: fixed;
+      top: 15%;
+      left: 15%;
+      text-align: center;
+    }
+    .header-comp {
+        position: fixed;
+        left: 60%;
+        top: 3%;
+    }
+    .link-button{
+      background-color: #28a745;
+      color: white;
+      padding: 2%;
+      text-decoration: none;
+      left: 60%;
+    }
+  
+    .create-room-button {
+      margin-top: 50%;
+    }
   }

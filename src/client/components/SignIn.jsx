@@ -26,11 +26,9 @@ class SignIn extends React.Component {
         this.setState({ password : event.target.value })
     }
     register(event) {
-        console.log("intialUserName" , this.state.userName)
-        console.log("intialpassword" , this.state.password)
         axios.post("/signin", {
-          username: this.state.userName, //13245
-          password: this.state.password // 1234567890
+          username: this.state.userName,
+          password: this.state.password
         })
         .then(function(response) {
           window.location.href = response.request.responseURL;
@@ -40,7 +38,6 @@ class SignIn extends React.Component {
         })
      }
      enterPressed(event){
-         console.log(event)
         var code = event.keyCode || event.which;
         if(code === 13) { //13 is the enter keycode
            this.register()
@@ -57,8 +54,8 @@ class SignIn extends React.Component {
             <div>
                 <LabbelledInput labelName ="UserName" inputType="text" updateInput={this.updateUserName}/>
                 <LabbelledInput labelName ="Password" inputType="password" updateInput={this.updatePassword} enterPressed={this.enterPressed}/>
-                <Button inputType="button" onClick={this.register} buttonName="LOG IN"/>
-                <Button inputType="button" onClick={this.newUserClick} buttonName="NEW USER"/>
+                <Button className="button-margin" inputType="button" onClick={this.register} buttonName="LOG IN"/>
+                <Button className="button-margin" inputType="button" onClick={this.newUserClick} buttonName="NEW USER"/>
             </div>
         )
     }

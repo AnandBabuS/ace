@@ -28,12 +28,9 @@ class SignUp extends React.Component {
         this.setState({initialConfirmPassword : event.target.value})
     }
     register(event) {
-        console.log("initialUserName" , this.state.initialUserName)
-        console.log("intialpassword" , this.state.initialPassword)
-        console.log("intialConfirmpassword" , this.state.initialConfirmPassword)
         if(!this.state.initialUserName || !this.state.initialPassword || !this.state.initialConfirmPassword){
             alert("Data insufficient")
-            return
+            return;
         }
         else if(this.state.initialPassword != this.state.initialConfirmPassword){
            alert("password doesnt match")
@@ -78,7 +75,7 @@ class SignUp extends React.Component {
                     <LabbelledInput value = {this.state.initialUserName} labelName ="UserName" inputType="text" updateInput={this.updateUserNameInput}/>
                     <LabbelledInput value = {this.state.initialPassword} labelName ="Password" inputType="password" updateInput={this.updatePasswordInput}/>
                     <LabbelledInput value = {this.state.initialConfirmPassword} labelName =" Confirm Password" inputType="password" updateInput={this.updateConfirmPasswordInput} enterPressed={this.enterPressed} />
-                    <Button inputType="button" onClick={this.register} buttonName="SUBMIT"/>
+                    <Button className="button-margin" inputType="button" onClick={this.register} buttonName="SUBMIT"/>
                 </div>
             )
 

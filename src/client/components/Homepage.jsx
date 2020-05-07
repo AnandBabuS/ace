@@ -113,14 +113,14 @@ class Homepage extends Component {
             <div>
                 <div className="header-comp">
                     Logged as {userName}
-                    <a href="/logout">logout</a>
                 </div>  
+                <a className="link-button" href="/logout">Logout</a>
                 {!this.state.showGameBoard?
                 (<div>
                     <Modal
                         isOpen={open}
                         onAfterOpen={this.fetchActiveUsers}
-                        contentLabel="Example Modal"
+                        contentLabel="Invite window"
                         className="Modal"
                         overlayClassName="Overlay"
                         ariaHideApp={false}
@@ -129,8 +129,14 @@ class Homepage extends Component {
                         <Button className="modal-button" onClick={this.onCloseModal} buttonName="Close"></Button>
                         <Button className="modal-button" onClick={this.onInvite} buttonName="Invite"></Button>
                     </Modal>
-                    <div className="text-align"> <Button className="btns-wrapper" inputType="button" onClick={this.onOpenModal} buttonName="Create Game"/> </div>
-                  
+                    <div className="text-align">
+                        <Button
+                            className="create-room-button"
+                            inputType="button"
+                            onClick={this.onOpenModal}
+                            buttonName="Create Room and Invite friends"
+                        />
+                    </div>
                 </div>) : <GameBoard players= {this.state.players} cards={ this.state.cards }/>}
                 
             </div>

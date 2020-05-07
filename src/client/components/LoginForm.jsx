@@ -4,29 +4,12 @@ import SignIn from './SignIn.jsx';
 import SignUp from './SignUp.jsx';
 
 class LoginForm extends Component {
-     
     render(){
         const newUser = this.props.newUser;
-        var myStyle = {
-            border: '3px double grey',
-            textAlign: 'center',
-            marginTop: '15%',
-            width: '50%',
-            marginLeft: '25%',
-            height: '300px',
-            background:' whitesmoke'
-         }
-         var title={
-            display: 'inline-block',
-            margin:'20px',
-            fontSize: 'xx-large'
-         }
-        
         return(
-            <div style={myStyle}>
-                <label style={title}>FORM</label>
+            <div className="login-wrapper">
+                <label className="title">Welcome to Ace</label>
                 {newUser?(<SignUp/>):(<SignIn/>)}
-                 
             </div>
         )
     
